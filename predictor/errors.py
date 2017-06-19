@@ -1,0 +1,2 @@
+class PredictorError(Exception):
+    pass
