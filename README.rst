@@ -7,7 +7,7 @@
 Доступные методы
 ----------------
 
-``GET /predict Content-Type: application/json``
+``POST /predict Content-Type: application/json``
 
 ``in: {"data":{},"classifier_name":""}``
 
