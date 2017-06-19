@@ -29,7 +29,7 @@ async def predict(request):
     log.debug("Loading classifier: {}".format(classifier_name))
     classifier = _load_classifier(classifier_name)
     result_class = await predictor.predict(input_vector, classifier)
-    return web.json_response({"class": int(result_class)})
+    return web.json_response({"class": str(result_class)})
 
 
 async def upload_classifier(request: web.Request):
