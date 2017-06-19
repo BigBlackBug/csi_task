@@ -22,7 +22,7 @@ async def error_middleware(app, handler):
             log.debug("Got request for {0}".format(request.rel_url))
             response = await handler(request)
         except PredictorError as ex:
-            log.error("Unexpected Error")
+            log.error("Unexpected Predictor Error", ex)
             return json_error(request, ex.args[0], traceback.format_exc())
         else:
             log.debug("Request handled for {0}".format(request.rel_url))
