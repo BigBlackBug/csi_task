@@ -20,13 +20,17 @@ async def predict(input_vector, classifier):
     # TODO prediction can take a long time
     # in the future should be refactored into a Future (lol)
     log.debug("Running prediction on vector {}".format(input_vector))
-    classes_found = classifier.predict(x)
-    log.debug("Found {} classes".format(classes_found))
-    n_classes = len(classes_found)
-    if n_classes == 0:
-        raise PredictorError("No classes have been detected")
-    elif n_classes > 1:
-        raise PredictorError(
-            "Only one class is expected to be detected, "
-            "instead got: {}".format(n_classes))
+    try:
+        classes_found = classifier.predict(x)
+    except Exception as ex:
+        raise PredictorError("Classifier threw an error", ex)
+    else:
+        log.debug("Found {} classes".format(classes_found))
+        n_classes = len(classes_found)
+        if n_classes == 0:
+            raise PredictorError("No classes have been detected")
+        elif n_classes > 1:
+            raise PredictorError(
+                "Only one class is expected to be detected, "
+                "instead got: {}".format(n_classes))
     return classes_found[0]
