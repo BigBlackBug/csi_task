@@ -1,26 +1,32 @@
 import os
 import pickle
 
-from aiohttp import web
 from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
 
 import constants
 from predictor import predictor
+from predictor.routes import routes
+from web import app
 
 
 class MainTestCase(AioHTTPTestCase):
-    """
-    No more tests today! I know I should have tested the service itself via
-    an HTTPClient or whatever or mocked out the requests but that would take
-    another hour. And I'm getting closer to my 2 hour limit, so not now :)
-    """
     async def get_application(self):
-        return web.Application()
+        return app.init(routes=routes, loop=self.loop)
 
     def get_classifier(self):
         return pickle.load(
             open(os.path.join(constants.BASE_DIR, 'test_data',
                               'test_classifier.pickle'), 'rb'))
+
+    @unittest_run_loop
+    async def test_classifier_empty_vector(self):
+        with self.assertRaises(ValueError):
+            await predictor.predict([], classifier=self.get_classifier())
+
+    @unittest_run_loop
+    async def test_classifier_none_classifier(self):
+        with self.assertRaises(ValueError):
+            await predictor.predict([1, 2, 3, 4], classifier=None)
 
     @unittest_run_loop
     async def test_classifier_no_error(self):
@@ -34,4 +40,3 @@ class MainTestCase(AioHTTPTestCase):
             ], classifier=self.get_classifier())
         except Exception:
             self.fail("predictor threw an error")
-
