@@ -30,6 +30,9 @@
 
 ``python -m unittest test.py``
 
+
+Естественно, сначала должна быть подготовлена virtualenv.
+
 TODO
 ----
 - Деплой.
