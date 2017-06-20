@@ -15,6 +15,11 @@ async def predict(input_vector, classifier):
     :return: class number
     """
     log.debug("Preparing input data {}".format(input_vector))
+    if len(input_vector) == 0:
+        raise ValueError("Input vector is empty")
+    if not classifier:
+        raise ValueError("classifier must not be null")
+
     x = np.array(input_vector)
     x = x.reshape(1, -1)
     # TODO prediction can take a long time
